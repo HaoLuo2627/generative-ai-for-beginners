@@ -1,12 +1,10 @@
 # Function Calling との統合
 
-![chapter image](../../images/11-lesson-banner.png?WT.mc_id=academic-105485-yoterada)
+[![Integrating with function calling](../../images/11-lesson-banner.png?WT.mc_id=academic-105485-koreyst)](https://aka.ms/gen-ai-lesson11-gh?WT.mc_id=academic-105485-koreyst)
 
 これまでのレッスンでかなり多くの内容を学びました。しかし、私たちはさらに成長できます。取り組むべき課題の一つは、一貫性のある回答フォーマットの作成です。回答フォーマットが一貫すると後続の処理はスムーズに進められます。また、他のデータ・ソースからデータを追加し、アプリケーションをさらに拡張できます。
 
 上記の問題を、この章で取り扱います。
-
-> **ビデオは近日公開予定**
 
 ## はじめに
 
@@ -21,7 +19,7 @@
 このレッスンを修了すると、下記を理解できます：
 
 - 関数呼び出しを使う理由を説明できます。
-- Azure Open AI Service を使用して関数呼び出しアプリを構築できます。
+- Azure OpenAI Service を使用して関数呼び出しアプリを構築できます。
 - アプリケーションのユースケースに適した効果的な関数呼び出しを設計できます。
 
 ## シナリオ：関数を用いてチャットボットを改善する
@@ -30,7 +28,7 @@
 
 このシナリオを実現するために、下記の機能やサービスを使用します：
 
-- `Azure Open AI`：利用者にチャット体験を提供する為に使用します。
+- `Azure OpenAI`：利用者にチャット体験を提供する為に使用します。
 - `Microsoft Learn Catalog API`：利用者のリクエストに基づいて、コースを見つける支援を行います。
 - `Function Calling`：利用者の問い合わせ内容を取得し、それを関数に送信し API リクエストを作成します。
 
@@ -40,20 +38,20 @@
 
 関数呼び出しを行う前は、LLM からの回答は構造化されておらず、一貫性がありませんでした。開発者は、得られるさまざまな回答に対して処理できるように、複雑な検証コードを記述する必要がありました。例えば、利用者は「今のストックホルムの天気は何ですか？」のような回答を得られませんでした。これは、モデルの学習データをトレーニングした時間が制限されているためです。
 
-「関数呼び出し」は、Azure Open AI Service の機能で、下記ができるようになります：
+「関数呼び出し」は、Azure OpenAI Service の機能で、下記ができるようになります：
 
 - **一貫した回答形式**：回答形式をより適切に制御できれば、回答結果を他のシステムに対してより簡単に統合できます。
 - **外部データの利用**：アプリケーションは、チャットのコンテキスト(文脈)に、他の外部データ・ソースのデータを使用できます。
 
 ## シナリオを通じた問題の説明
 
-> *Notebook.ipynb* というファイルを作成し、下記のコードをコピー＆ペーストしてください。仮に下記のシナリオを実行したい場合は、別のコードセルへの貼り付けをお勧めします。また、下記に記述する関数が、実際の問題に対処するための説明も行っているので、あわせて記述内容をご覧ください。
+> _Notebook.ipynb_ というファイルを作成し、下記のコードをコピー＆ペーストしてください。仮に下記のシナリオを実行したい場合は、別のコードセルへの貼り付けをお勧めします。また、下記に記述する関数が、実際の問題に対処するための説明も行っているので、あわせて記述内容をご覧ください。
 
 「一貫した回答フォーマットの取得」に関する問題の例を見てみましょう：
 
 たとえば、学生データのデータベースを作成し、学生に対して適切なコースを提案できるようにしたいと考えています。下記に含まれているデータ中に、2 人の非常によく似た学生の説明があります。
 
-1. Azure Open AI リソースへの接続を作成します。
+1. Azure OpenAI リソースへの接続を作成します。
 
 ```python
 import os
@@ -61,18 +59,18 @@ import json
 from openai import AzureOpenAI
 from dotenv import load_dotenv
 load_dotenv()
-    
+
 client = AzureOpenAI(
-api_key=os.environ['AZURE_OPENAI_KEY'],  # これもデフォルトで省略できます
+api_key=os.environ['AZURE_OPENAI_API_KEY'],  # これもデフォルトで省略できます
 api_version = "2023-07-01-preview"
 )
 
 deployment=os.environ['AZURE_OPENAI_DEPLOYMENT']
 ```
 
-上記は、Azure Open AI への接続するための　Python　コードで、ここでは `api_version`、`api_key`を設定します。
+上記は、Azure OpenAI への接続するための　 Python 　コードで、ここでは `api_version`、`api_key`を設定します。
 
-1. `student_1_description`と`student_2_description`という変数を使用して、2人の学生の説明を記述します。
+1. `student_1_description`と`student_2_description`という変数を使用して、2 人の学生の説明を記述します。
 
 ```python
 student_1_description= f'''Emily Johnson は、Duke University の
@@ -96,34 +94,34 @@ Michael はプログラミングが得意と知られており、大学のロボ
 ```python
 prompt1 = f'''
    以下の情報を指定されたテキストから抽出し、それをJSONオブジェクトとして返してください：
-    
+
    名前
    専攻
    学校
    成績
    クラブ
-    
+
    情報を抽出するためのテキスト本文は以下の通りです：
    {student_1_description}
    '''
-    
+
    prompt2 = f'''
    以下の情報を指定されたテキストから抽出し、それをJSONオブジェクトとして返してください：
-    
+
    名前
    専攻
    学校
    成績
    クラブ
-    
+
    情報を抽出するためのテキスト本文は以下の通りです：
    {student_2_description}
    '''
 ```
 
-   上記のプロンプトは、LLM に情報を抽出し、応答を JSON 形式で返すように指示しています。
+上記のプロンプトは、LLM に情報を抽出し、応答を JSON 形式で返すように指示しています。
 
-1. プロンプトと Azure Open AI の接続設定を行った後、`openai.ChatCompletion`を使用してプロンプトを LLM に送信します。プロンプトは `messages` 変数に格納し、ロールを `user` に設定します。これはチャット・ボットに対して、利用者からメッセージが書き込まれる様子を模倣するために記載しています。
+1. プロンプトと Azure OpenAI の接続設定を行った後、`openai.ChatCompletion`を使用してプロンプトを LLM に送信します。プロンプトは `messages` 変数に格納し、ロールを `user` に設定します。これはチャット・ボットに対して、利用者からメッセージが書き込まれる様子を模倣するために記載しています。
 
    ```python
    # プロンプト1からの応答
@@ -155,23 +153,23 @@ json_response1
 
 ```json
 {
-    "name": "Emily Johnson", 
-    "major": "コンピューターサイエンス", 
-    "school": "Duke University", 
-    "grades": "3.7",
-     "club": "チェス・クラブ" 
+  "name": "Emily Johnson",
+  "major": "コンピューターサイエンス",
+  "school": "Duke University",
+  "grades": "3.7",
+  "club": "チェス・クラブ"
 }
 ```
 
 応答 2:
 
 ```json
-{ 
-    "name": "Michael Lee", 
-    "major": "コンピューターサイエンス", 
-    "school": "Stanford University", 
-    "grades": "3.8 GPA", 
-    "club": "ロボティクス・クラブ" 
+{
+  "name": "Michael Lee",
+  "major": "コンピューターサイエンス",
+  "school": "Stanford University",
+  "grades": "3.8 GPA",
+  "club": "ロボティクス・クラブ"
 }
 ```
 
@@ -191,21 +189,21 @@ json_response1
 
 - **外部ツールの呼び出し**：チャット・ボットは利用者からの質問に回答するのが得意です。関数呼び出しを使用すると、チャット・ボットは利用者からのメッセージを使用して、特定のタスクを完了できます。例えば、学生はチャットボットに「この科目についてさらに支援が必要というメールを、教員に送信してください」と依頼できます。これにより、`send_email(to: string, body: string)`という関数呼び出しを行います。
 
-- **API　またはデータベースクエリの作成**：利用者は、書式設定された問い合わせ、または API 要求に変換される自然言語を使用して、情報を検索できます。例えば、教師が「最後の課題を完了した生徒は誰ですか」と要求すると、`get_completed(student_name: string, assignment: int, current_status: string)`という関数を呼び出します。
+- **API 　またはデータベースクエリの作成**：利用者は、書式設定された問い合わせ、または API 要求に変換される自然言語を使用して、情報を検索できます。例えば、教師が「最後の課題を完了した生徒は誰ですか」と要求すると、`get_completed(student_name: string, assignment: int, current_status: string)`という関数を呼び出します。
 
 - **構造化データの作成**：利用者は、テキストまたは CSV フォーマットのデータを取得し、LLM を使用して、そこから重要な情報を抽出できます。例えば学生は、和平合意に関するウィキペディアの記事を変換して、AI フラッシュカードを作成できます。これは、`get_important_facts(agreement_name: string, date_signed: string, parties_involved: list)`という関数を使用して行います。
 
 ## 最初の関数呼び出しの作成
 
-関数呼び出しを作成するプロセスは、以下の3つの主要なステップから構成されています。
+関数呼び出しを作成するプロセスは、以下の 3 つの主要なステップから構成されています。
 
-1. **呼び出し**：関数リストとユーザー・メッセージを用いて、Chat Completions API を呼び出します。  
-2. **読み取り**：モデルからの回答を読み取り、アクションを実行します。つまり、関数を実行したり、API 呼び出しを行ったりします。  
+1. **呼び出し**：関数リストとユーザー・メッセージを用いて、Chat Completions API を呼び出します。
+2. **読み取り**：モデルからの回答を読み取り、アクションを実行します。つまり、関数を実行したり、API 呼び出しを行ったりします。
 3. **再呼び出し**：関数からの返却値を用いて、Chat Completions API を再度呼び出し、その情報を使用して利用者に対する回答を作成します。
 
 ![LLM Flow](../../images/LLM-Flow.png?WT.mc_id=academic-105485-yoterada)
 
-### ステップ1 - メッセージの作成
+### ステップ 1 - メッセージの作成
 
 最初のステップで、ユーザー・メッセージを作成します。これは、テキストの入力値を取得して動的に割り当てるか、もしくはここで直接値を割り当てできます。仮に Chat Completions API を初めて使用するの場合は、メッセージの `role` と `content` を定義してください。
 
@@ -217,9 +215,9 @@ messages= [ {"role": "user", "content": "初心者の学生が Azure を学ぶ�
 
 異なる役割を割り当てると、LLM は、システムが言っているのか、それとも利用者が言っているのかが明確になり、LLM は会話履歴を構築するのに役立ちます。
 
-### ステップ2 - 関数の作成
+### ステップ 2 - 関数の作成
 
-次に、関数とその関数のパラメータを定義します。ここでは `search_courses` という1つの関数のみを使用しますが、複数の関数も作れます。
+次に、関数とその関数のパラメータを定義します。ここでは `search_courses` という 1 つの関数のみを使用しますが、複数の関数も作れます。
 
 > **重要** : 関数は LLM のシステム・メッセージに含まれており、利用可能なトークンの数に含まれます。
 
@@ -259,15 +257,15 @@ functions = [
 - `name` - 呼び出したい関数名
 - `description` - 関数がどのように動作するかの説明。ここは具体的で明確な説明の記述が必要
 - `parameters` - モデルによって回答で生成する値とフォーマットのリスト。`parameters` 配列として構成し、次のプロパティを含む
-   1. `type` - プロパティのデータ型
-   1. `properties` - 回答に使用する特定の値のリスト
+  1.  `type` - プロパティのデータ型
+  1.  `properties` - 回答に使用する特定の値のリスト
       1. `name` - フォーマットされた回答で使用するプロパティ名。例えば、`product`
       1. `type` - プロパティのデータ型。例えば、`string`
       1. `description` - 特定のプロパティの説明
 
 また、オプションのプロパティとして `required`もあります。これは関数呼び出しが必須かを指定するプロパティです。
 
-### ステップ3 - 関数呼び出しの実行
+### ステップ 3 - 関数呼び出しの実行
 
 関数を定義した後、次に Chat Completion API の呼び出しにその関数を含める必要があります。これを行うには、リクエストに `functions` を追加します。この場合、`functions=functions`とします。
 
@@ -473,7 +471,7 @@ print(second_response.choices[0].message)
 
 ## 課題
 
-Azure Open AI Function Calling の学習を続けるために、以下を試してみてください。
+Azure OpenAI Function Calling の学習を続けるために、以下を試してみてください。
 
 - 学習者がより多くのコースを見つける為に有効な関数のパラメーターを探して増やす。
 - 学習者の母国語を聞くなど、学習者からより多くの情報を取得するための別の関数呼び出しを作成する。
@@ -484,7 +482,5 @@ Azure Open AI Function Calling の学習を続けるために、以下を試し�
 ## お疲れ様でした!　学習を続ける
 
 このレッスン修了後、[生成 AI 学習コレクション](https://aka.ms/genai-collection?WT.mc_id=academic-105485-yoterada) をチェックして、Generative AI の知識をレベルアップさせましょう。
-
-Head over to Lesson 12 where we will look at how to !
 
 次のレッスン 12 では、[AI アプリケーション用の UX デザイン](../../../12-designing-ux-for-ai-applications/translations/ja-jp/README.md?WT.mc_id=academic-105485-yoterada)について学びます！

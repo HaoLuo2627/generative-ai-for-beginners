@@ -1,6 +1,6 @@
 # AI アプリケーションの UX 設計
 
-[![Designing UX for AI Applications](../../images/12-lesson-banner.png?WT.mc_id=academic-105485-yoterada)](https://learn.microsoft.com/_themes/docs.theme/master/en-us/_themes/global/video-embed.html?id=1464ef7a-d974-4a04-9ce3-1bc5b3087b4b?WT.mc_id=academic-105485-yoterada)
+[![Designing UX for AI Applications](../../images/12-lesson-banner.png?WT.mc_id=academic-105485-yoterada)](https://aka.ms/gen-ai-lesson12-gh?WT.mc_id=academic-105485-koreyst)
 
 > _(上の画像をクリックすると、このレッスンのビデオが表示されます)_
 
@@ -25,7 +25,7 @@
 
 ### 前提
 
-少し時間を取ってこちらの、[MS Laern: ユーザー・エクスペリエンスとデザイン思考](https://learn.microsoft.com/training/modules/ux-design?WT.mc_id=academic-105485-yoterada)の基礎について学んでみましょう。
+少し時間を取ってこちらの、[MS Laern: ユーザーエクスペリエンスとデザイン思考の基礎](https://learn.microsoft.com/training/modules/ux-design?WT.mc_id=academic-105485-yoterada)について学んでみましょう。
 
 ## ユーザー・エクスペリエンスの概要と利用者ニーズの理解
 

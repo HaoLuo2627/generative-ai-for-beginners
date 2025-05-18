@@ -1,6 +1,6 @@
 # さまざまな LLM の調査と比較
 
-[![Exploring and comparing different LLMs](../../images/02-lesson-banner.png?WT.mc_id=academic-105485-yoterada)](https://learn.microsoft.com/_themes/docs.theme/master/en-us/_themes/global/video-embed.html?id=36c6795a-e63c-46dd-8d69-df8bbe6e7bc9?WT.mc_id=academic-105485-yoterada)
+[![Exploring and comparing different LLMs](../../images/02-lesson-banner.png?WT.mc_id=academic-105485-yoterada)](https://aka.ms/gen-ai-lesson2-gh?WT.mc_id=academic-105485-koreyst)
 
 > _(上記の画像をクリックすると、レッスン・ビデオを表示します)_
 
@@ -62,7 +62,7 @@ LLM モデルには、さまざまな種類があり、どのモデルを選択�
 
 大規模言語モデル（LLM）を分類する別の方法として、それがオープンソースなのか、もしくはプロプライエタリな物なのか、という観点もあります。
 
-オープンソース・モデルは、一般に公開され、誰でも利用できるモデルです。これらは多くの場合、そのモデルを開発した企業や研究コミュニティによって提供されます。これらのモデルは、LLM の様々な用途に合わせて検証、変更、カスタマイズの許可がされています。しかし、常に本番環境での利用に最適化されているわけではなく、プロプライエタリモデルほど高いパフォーマンスを発揮しない場合もあります。さらに、オープンソース・モデルの資金調達は限られており、長期的に継続できない可能性や、最新の研究に基づいて更新されていない可能性もあります。[Alpaca](https://crfm.stanford.edu/2023/03/13/alpaca.html?WT.mc_id=academic-105485-yoterada)、[Bloom](https://sapling.ai/llm/bloom?WT.mc_id=academic-105485-yoterada)、[LLaMA](https://sapling.ai/llm/llama?WT.mc_id=academic-105485-yoterada) などが人気のオープンソース・モデルの例です。
+オープンソース・モデルは、一般に公開され、誰でも利用できるモデルです。これらは多くの場合、そのモデルを開発した企業や研究コミュニティによって提供されます。これらのモデルは、LLM の様々な用途に合わせて検証、変更、カスタマイズの許可がされています。しかし、常に本番環境での利用に最適化されているわけではなく、プロプライエタリモデルほど高いパフォーマンスを発揮しない場合もあります。さらに、オープンソース・モデルの資金調達は限られており、長期的に継続できない可能性や、最新の研究に基づいて更新されていない可能性もあります。[Alpaca](https://crfm.stanford.edu/2023/03/13/alpaca.html?WT.mc_id=academic-105485-yoterada)、[Bloom](https://huggingface.co/bigscience/bloom)、[LLaMA](https://llama.meta.com) などが人気のオープンソース・モデルの例です。
 
 プロプライエタリ・モデルは、企業が所有し一般には公開されていないモデルです。これらのモデルは、通常本番環境での利用に最適化されています。しかし異なるユースケースに対して、検証、変更、カスタマイズは許可されていません。また、常に無料で利用できるわけではなく、利用するためには、サブスクリプション等による支払いが必要な場合もあります。さらに、利用者はモデルをトレーニングする際に使用するデータをコントロールできず、データのプライバシーや、責任ある AI の原則に基づく使用をモデル・プロバイダが保証しているのを信用しなければなりません。[OpenAI のモデル](https://platform.openai.com/docs/models/overview?WT.mc_id=academic-105485-yoterada)、[Google Bard](https://sapling.ai/llm/bard?WT.mc_id=academic-105485-yoterada)、[Claude 2](https://www.anthropic.com/index/claude-2?WT.mc_id=academic-105485-yoterada) などが人気のプロプライエタリ・モデルです。
 
@@ -155,7 +155,7 @@ LLM モデルには、さまざまな種類があり、どのモデルを選択�
 LLM は、モデルのトレーニング中に使用したデータだけを使って回答を作るという制約があります。つまり、トレーニング・プロセス後に発生した事実については何も分からず、非公開情報 (企業データなど) も利用できません。
 
 しかし、上記の制約は RAG と呼ぶ手法で対応できます。RAG は、プロンプトの長さ制限を考慮しつつ、外部データ（ドキュメントの一部）をプロンプト内に含めて問い合わせを行う手法です。
-RAG は Vector データベース（[Azure AI Search](https://learn.microsoft.com/azure/search/vector-search-overview?WT.mc_id=academic-105485-yoterada) など）でサポートされており、さまざまな定義済みのデータ・ソースから有用なドキュメントの一部を取得し、プロンプトのコンテキスト（文脈）に含めて、より正確な回答が得られるようになります。
+RAG は ベクトルデータベース（[Azure AI Search](https://learn.microsoft.com/azure/search/vector-search-overview?WT.mc_id=academic-105485-yoterada) など）でサポートされており、さまざまな定義済みのデータ・ソースから有用なドキュメントの一部を取得し、プロンプトのコンテキスト（文脈）に含めて、より正確な回答が得られるようになります。
 
 この技術は、LLM のファイン・チューニングが困難（十分なデータ、時間、リソースがない）な企業にとって非常に有用です。
 そして特定の負荷試験におけるパフォーマンスを向上させたい場合や、回答の捏造リスク、つまり現実の歪曲や、有害なコンテンツのリスクを減らしたい場合に非常に有効です。
@@ -188,7 +188,7 @@ A: 3、時間とリソース、高品質のデータがある場合 ファイン
 > 訳者追記：  
 > 訳者的には 1,2,3 の順番で検討するのが良いと思います。ケース・バイ・ケースですが、ファイン・チューニングは、時間とリソースがある場合に検討するのが良いと思います。
 
-## 🚀 Challenge
+## 🚀 チャレンジ
 
 ビジネスで RAG を活用する方法についてもっと学びたい方は、[こちら](https://learn.microsoft.com/azure/search/retrieval-augmented-generation-overview?WT.mc_id=academic-105485-yoterada)をご覧ください。
 
